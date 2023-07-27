@@ -1,15 +1,40 @@
 import { openai } from "../index.js";
 
+const headers = {
+  "Project-ID": process.env.CHAT_ENGINE_PROJECT_ID,
+  "User-Name": process.env.CHAT_ENGINE_BOT_USERNAME,
+  "User-Secret": process.env.CHAT_ENGINE_BOT_SECRET,
+};
+
 const text = async (req, res) => {
   try {
     const { text, activeChatId } = req.body;
 
     const response = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
-      messages: [{"role": "system", "content": "You are a helpful assistant."}, {role: "user", content: text}],
+      messages: [
+        { role: "system", content: "You are a helpful assistant." },
+        { role: "user", content: text },
+      ],
     });
-    console.log(text)
-    console.log(response.data.choices[0].message);
+
+    // const requestOptions = {
+    //   method: "POST",
+    //   headers,
+    //   body: text,
+    //   redirect: "follow",
+    // };
+
+    // fetch(
+    //   `https://api.chatengine.io/chats/${activeChatId}/messages/`,
+    //   requestOptions
+    // )
+    //   .then((response) => response.text())
+    //   .then((result) => console.log(result))
+    //   .catch((error) => console.log("error", error));
+
+    console.log(text);
+    console.log(response.data.choices[0].message.content);
     res.status(200).json({ text });
   } catch (error) {
     console.log("Error", error);
