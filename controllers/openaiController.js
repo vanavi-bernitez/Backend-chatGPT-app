@@ -14,9 +14,8 @@ const headers = {
 const text = async (req, res) => {
   try {
     const { text, activeChatId } = req.body;
-    console.log("BODY", req.body);
 
-    const response = await openai.createChatCompletion({
+    const openaiResponse = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: [
         { role: "system", content: "You are a helpful assistant." },
@@ -24,24 +23,26 @@ const text = async (req, res) => {
       ],
     });
 
-    const requestOptions = {
+    const chatEngineRequestOptions = {
       method: "POST",
       headers,
       body: JSON.stringify({
-        text: response.data.choices[0].message.content,
+        text: openaiResponse.data.choices[0].message.content,
       }),
       redirect: "follow",
     };
 
     await fetch(
       `https://api.chatengine.io/chats/${activeChatId}/messages/`,
-      requestOptions
+      chatEngineRequestOptions
     )
       .then((response) => response.text())
       .then((result) => console.log("chat engine", result))
-      .catch((error) => console.log("error", error));
+      .catch((error) => console.log("error posting to chat engine", error));
 
-    res.status(200).json({ text: response.data.choices[0].message.content });
+    res
+      .status(200)
+      .json({ text: openaiResponse.data.choices[0].message.content });
   } catch (error) {
     console.log("Error", error);
     res.status(500).json({ error: error.message });
@@ -79,7 +80,7 @@ const code = async (req, res) => {
     )
       .then((response) => response.text())
       .then((result) => console.log("chat engine", result))
-      .catch((error) => console.log("error", error));
+      .catch((error) => console.log("error posting to chat engine", error));
 
     res.status(200).json({ text: response.data.choices[0].message.content });
   } catch (error) {
@@ -90,7 +91,7 @@ const code = async (req, res) => {
 
 const assist = async (req, res) => {
   try {
-    const { text, activeChatId } = req.body;
+    const { text } = req.body;
 
     const response = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
