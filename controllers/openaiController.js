@@ -1,5 +1,7 @@
-import { openai } from "../index.js";
 import dotenv from "dotenv";
+
+import { openai } from "../index.js";
+
 dotenv.config();
 
 const headers = {
@@ -62,8 +64,24 @@ const code = async (req, res) => {
       ],
     });
 
-    console.log(text, response);
-    res.status(200).json({ text });
+    const requestOptions = {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        text: response.data.choices[0].message.content,
+      }),
+      redirect: "follow",
+    };
+
+    await fetch(
+      `https://api.chatengine.io/chats/${activeChatId}/messages/`,
+      requestOptions
+    )
+      .then((response) => response.text())
+      .then((result) => console.log("chat engine", result))
+      .catch((error) => console.log("error", error));
+
+    res.status(200).json({ text: response.data.choices[0].message.content });
   } catch (error) {
     console.log("Error", error);
     res.status(500).json({ error: error.message });
@@ -94,4 +112,4 @@ const assist = async (req, res) => {
   }
 };
 
-export { text };
+export { text, code, assist };
