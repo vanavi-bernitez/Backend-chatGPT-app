@@ -7,7 +7,7 @@ const login = async (req, res) => {
     const { username, password } = req.body;
 
     const headers = {
-      "PRIVATE-KEY": process.env.CHAT_ENGINE_SECRET_KEY,
+      "Project-ID": process.env.CHAT_ENGINE_PROJECT_ID,
       "User-Name": username,
       "User-Secret": password,
       "Content-Type": "application/json",
@@ -24,7 +24,9 @@ const login = async (req, res) => {
       chatEngineRequestOptions
     );
 
-    res.status(200).json({ response: chatEngineResponse.data });
+    const data = await chatEngineResponse.json();
+
+    res.status(200).json({ response: data });
     console.log("ok login");
   } catch (error) {
     res.status(500).json({ error: error.message });

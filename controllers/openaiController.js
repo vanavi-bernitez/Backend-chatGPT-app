@@ -6,7 +6,7 @@ dotenv.config();
 
 const headers = {
   "Project-ID": process.env.CHAT_ENGINE_PROJECT_ID,
-  "User-Name": process.env.CHAT_ENGINE_BOT_USERNAME,
+  "Useme": process.env.CHAT_ENGINE_BOT_USERNAME,
   "User-Secret": process.env.CHAT_ENGINE_BOT_SECRET,
   "Content-Type": "application/json",
 };
