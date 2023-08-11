@@ -25,12 +25,11 @@ const login = async (req, res) => {
     );
 
     const data = await chatEngineResponse.json();
-
+    console.log(data);
     res.status(200).json({ response: data });
-    console.log("ok login");
   } catch (error) {
     res.status(500).json({ error: error.message });
-    console.log("error");
+    console.log("error", error);
   }
 };
 
@@ -59,7 +58,6 @@ const signup = async (req, res) => {
     );
 
     res.status(200).json({ response: chatEngineResponse.data });
-    console.log("ok sigup");
   } catch (error) {
     res.status(500).json({ error: error.message });
     console.log(error.message);

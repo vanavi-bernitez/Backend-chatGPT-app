@@ -6,7 +6,7 @@ dotenv.config();
 
 const headers = {
   "Project-ID": process.env.CHAT_ENGINE_PROJECT_ID,
-  "Useme": process.env.CHAT_ENGINE_BOT_USERNAME,
+  "User-Name": process.env.CHAT_ENGINE_BOT_USERNAME,
   "User-Secret": process.env.CHAT_ENGINE_BOT_SECRET,
   "Content-Type": "application/json",
 };
@@ -44,7 +44,6 @@ const text = async (req, res) => {
       .status(200)
       .json({ text: openaiResponse.data.choices[0].message.content });
   } catch (error) {
-    console.log("Error", error);
     res.status(500).json({ error: error.message });
   }
 };
